@@ -2,6 +2,7 @@ package com.dy.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.dy.model.User;
+import com.dy.utils.SignUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -35,25 +36,37 @@ public class NameController {
 
         //  1. 从请求头中获取 accessKey 和 secretKey 来判断是否为合法调用
         String accessKey = request.getHeader("accessKey");
-        String secretKey = request.getHeader("secretKey");
+        String nonce = request.getHeader("nonce");
+        String timestamp = request.getHeader("timestamp");
+        String sign = request.getHeader("sign");
+        String body = request.getHeader("body");
 
 
         // TODO: 2023/12/22  这里应该是从数据库中取 accessKey 和 secretKey 的, 这里先不照做
-
-        if (StrUtil.hasBlank(accessKey, secretKey)) {
+        if (!accessKey.equals("dingyu")) {
             throw new RuntimeException("无权限!!");
         }
 
-        if (!accessKey.equals("dingyu") || !secretKey.equals("Hello world")) {
+        //  判断随机数是否重复
+        if (Long.parseLong(nonce) > 10000) {
             throw new RuntimeException("无权限!!");
         }
+
+        //  判断时间是否超时...
+
+        // TODO: 2023/12/22 实际是从数据库中查出的 secretKey
+        String serverSign = SignUtils.getSign(body, "Hello world");
+
+        if (!sign.equals(serverSign)) {
+            throw new RuntimeException("无权限!!");
+        }
+
 
         //  2. 校验完成, 放行调用
 
         System.out.println("json post 你的名字为: " + user.getName());
         return "json post 你的名字为: " + user.getName();
     }
-
 
 
 }

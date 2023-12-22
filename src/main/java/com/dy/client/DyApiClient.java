@@ -1,10 +1,12 @@
 package com.dy.client;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.dy.model.User;
+import com.dy.utils.SignUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -52,7 +54,7 @@ public class DyApiClient {
         String json = JSONUtil.toJsonStr(user);
 
         HttpResponse httpResponse = HttpRequest.post("http://localhost:8081/api/name/json")
-                .addHeaders(getHeaderMap())
+                .addHeaders(getHeaderMap(json))
                 .body(json)
                 .execute();
 
@@ -64,11 +66,17 @@ public class DyApiClient {
         return "json post 你的名字为: " + result;
     }
 
-    private Map<String, String> getHeaderMap() {
+    private Map<String, String> getHeaderMap(String body) {
         HashMap<String, String> header = new HashMap<>();
         header.put("accessKey", accessKey);
 //        header.put("secretKey", secretKey);
 
+        //  增加参数
+        header.put("nonce", RandomUtil.randomNumbers(4));
+        header.put("body", body);
+
+        header.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
+        header.put("sign", SignUtils.getSign(body, secretKey));
 
 
 
