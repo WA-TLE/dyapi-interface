@@ -39,6 +39,12 @@
             <version>5.8.16</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.dy</groupId>
+            <artifactId>dyapi-client-sdk</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
