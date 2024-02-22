@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.dy</groupId>
-    <artifactId>dyapi-interface</artifactId>
+    <artifactId>dy-api-interface</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>dyapi-interface</name>
-    <description>dyapi-interface</description>
+    <name>dy-api-interface</name>
+    <description>dy-api-interface</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -41,7 +41,7 @@
 
         <dependency>
             <groupId>com.dy</groupId>
-            <artifactId>dyapi-client-sdk</artifactId>
+            <artifactId>dy-client-sdk</artifactId>
             <version>0.0.1</version>
         </dependency>
 
